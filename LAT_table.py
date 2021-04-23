@@ -82,10 +82,7 @@ for x in range(0,16):
 
 
 
-#for i in range (len(Array_X)):
-#    for j in range(len(Array_X[i])):
-#        print (Array_X[i][j], end='')
-#    print()
+
 
 
 
