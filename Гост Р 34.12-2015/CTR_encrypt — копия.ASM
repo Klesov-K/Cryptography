@@ -204,6 +204,28 @@ entry start
 
 ;        ret
 
+delete_key:
+                push ebp
+                mov ebp, esp
+                mov esi, key
+                mov edi, key_step
+                mov eax, 0
+                mov [esi],eax
+                mov [edi], eax
+
+                mov ecx, 32
+                mov esi, key0
+                mov al, 0
+       .Metka:
+                mov byte [esi],al
+                Loop .Metka
+
+
+                pop ebp
+                mov esp, ebp
+
+         ret
+
  inc_CTR:
                 push ebp
                 mov ebp, esp
@@ -1184,18 +1206,7 @@ last_step:
                 push esi
                 push edi
 
-                call gamma_xor_fbuf                 ;накладываем гамму на входной текст
-
-
-
-
-
-
-
-
-                                              ;32 раунда шифрования
-
-
+                call gamma_xor_fbuf                 ;накладываем гамму на входной текс
 
 
 
@@ -1211,14 +1222,6 @@ last_step:
                 pop eax
 
                ;проверка ,достигнут ли конец файла
-
-
-
-
-
-
-
-
 
 
                 sub edi,8
@@ -1252,55 +1255,17 @@ last_step:
 
 
 
-
-
-
-
-
                ;Освобождаем динамическую память
                cinvoke free, [fbuf]
+               ;Удаляем ключи из памяти
+               
+               call delete_key
 
-     ;time;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-      ;time;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    
 
 
          .finish:
               ;  call [getch]
-
-
-                 mov esi,time_end
-                     rdtsc
-                     mov [esi], edx
-                     mov [esi+4],eax
-
-              .time:
-                    mov edi, time_start
-                    ; mov ecx, time
-                    sub edx,[edi]
-                    sub eax, [edi+4]
-
-                    mov ecx, time
-                    mov [ecx],edx
-                    mov [ecx+4], eax
-
-
-
-
-                  cinvoke printf,"time:= %d ",eax,<13,10,0>
-
-
-
-
-
-
-
-
-
-
-
-
 
                 push NULL
                 call [ExitProcess]
